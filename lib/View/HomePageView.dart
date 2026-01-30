@@ -16,8 +16,9 @@ class HomePage extends StatefulWidget {
 
 class _HomepageState extends State<HomePage> {
  int selectedIndex = 0;
+ bool isSearch = false;
 late Future<List<Country>> cs;
-
+var tfCR = TextEditingController();
  @override
   void initState() {
     // TODO: implement initState
@@ -33,11 +34,9 @@ late Future<List<Country>> cs;
     );
   }
 
-
-
   Widget buildHomePageBody(){
 
-      return Column(
+      return isSearch ? Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
@@ -48,6 +47,115 @@ late Future<List<Country>> cs;
               child: Padding(
                 padding: const EdgeInsets.only(left: 18.0),
                 child: TextField(
+                  onChanged:(callResponse){
+                    setState(() {
+                      isSearch =true;
+                      tfCR.text = callResponse;
+                    });
+                  },
+                  decoration: InputDecoration(
+                      hint: Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 15),
+                            child: Icon(Icons.search),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 15),
+                            child: Text("Ülke veya Bölge Ara"),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 125.0,top: 10),
+                            child: IconButton(onPressed: (){
+                                setState(() {
+                                  isSearch = false;
+                                });
+                              }, icon: Icon(Icons.cancel)),
+                          ),
+                        ],
+                      ),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(12))
+                      )
+                  ),
+
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 735,
+            child: FutureBuilder(future: cs, builder: (context,snapshot){
+              if(snapshot.hasData){
+                var countries = snapshot.data;
+                if(isSearch){
+                  countries = countries!.where((country){
+                    return country.name.common.toLowerCase().contains(tfCR.text.toLowerCase());
+                  }).toList();
+                }
+                return GridView.builder(
+                    itemCount: countries!.length,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,childAspectRatio: 1.6),
+                    itemBuilder: (context,index){
+                     var country = countries![index];
+                     return SizedBox(
+                       height: 200,
+                       child: Card(
+                         child: Stack(
+                           children: [
+                                 Positioned.fill(
+                                     child: Image.network(country.flags.png,fit: BoxFit.cover,)),
+                                Positioned.fill(child: Container(
+                                  decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter,
+                                      colors: [
+                                        Colors.transparent,
+                                        Colors.black.withOpacity(0.8),
+                                      ]),
+                                  ),
+                                )),
+                                 Positioned(
+                                     top: 95,
+                                     left: 2,
+                                     child: Text(country.name.common,style: TextStyle(color: Colors.white),)
+                                 ),
+
+                           ],
+                         ),
+                       ),
+                     );
+                    });
+              }
+              else{
+                return Center(child: CircularProgressIndicator(),);
+              }
+            }),
+          ),
+        ],
+      )
+          : Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 50.0),
+            child: SizedBox(
+              height: 45,
+              width: 375,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 18.0),
+                child: TextField(
+                  onTap:(){
+                    setState(() {
+                      isSearch =true;
+                    });
+                  },
+                  onChanged:(callResponse){
+                      setState(() {
+                        tfCR.text = callResponse;
+                      });
+                  },
                   decoration: InputDecoration(
                     hint: Row(
                       children: [
@@ -112,7 +220,7 @@ late Future<List<Country>> cs;
                                       end: Alignment.bottomCenter,
                                       colors: [
                                         Colors.transparent,
-                                        Colors.black.withOpacity(0.1),
+                                        Colors.black.withOpacity(0.8),
                                       ],
                                     ),
                                   ),
@@ -121,7 +229,7 @@ late Future<List<Country>> cs;
                               Positioned(
                                   left: 2,
                                   top: 170,
-                                  child: Text("${country.name.common}",style: TextStyle(fontSize: 13,color: Colors.black),))
+                                  child: Text("${country.name.common}",style: TextStyle(fontSize: 13,color: Colors.white),))
                             ],
                           ),
                         ),
@@ -218,12 +326,23 @@ late Future<List<Country>> cs;
                                       fit: BoxFit.cover,
                                     ),
                                   ),
+                                  Positioned.fill(child: Container(
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                          begin: Alignment.topCenter,
+                                          end: Alignment.bottomCenter,
+                                          colors: [
+                                            Colors.transparent,
+                                            Colors.black.withOpacity(0.8)
+                                          ])
+                                    ),
+                                  )),
                                   Positioned(
                                     left: 8,
                                     bottom: 8,
                                     child: Text(
                                       country.name.common,
-                                      style: TextStyle(color: Colors.black),
+                                      style: TextStyle(color: Colors.white),
                                     ),
                                   ),
                                 ],

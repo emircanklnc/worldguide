@@ -1,3 +1,4 @@
+import 'package:country_app/View/DetailCounrtyView.dart';
 import 'package:flutter/material.dart';
 
 import '../Model/CountryModel.dart';
@@ -15,7 +16,8 @@ class _CountryPageState extends State<CountryPage> {
   @override
   late Future<List<Country>> cs;
   late int selectedIndex = 1;
-  var isSearch = 0;
+  bool isSearch = false;
+  var tfCountry = TextEditingController();
   @override
   void initState() {
     // TODO: implement initState
@@ -35,16 +37,38 @@ class _CountryPageState extends State<CountryPage> {
 
   AppBar buildCountryAppbar() {
     return AppBar(
-           leading:
-          Row(
+          title:  Row(
         children: [
-          Text("Ülkeler",style: TextStyle(fontSize: 17, fontWeight : FontWeight.w700),)
-        ],  
+         isSearch ? SizedBox(
+           height: 50,
+           width: 275,
+           child: TextField(
+             controller: tfCountry,
+             onChanged: (callResponse){
+               setState(() {
+                 tfCountry.text = callResponse;
+               });
+             },
+             decoration: InputDecoration(
+               hintText: "Ülke Ara",
+               border: OutlineInputBorder(
+                 borderRadius: BorderRadius.circular(20),
+                 borderSide: BorderSide(),
+               )
+             ),
+           ),
+         )
+             : Text("Ülkeler",style: TextStyle(fontSize: 17, fontWeight : FontWeight.w700),)
+        ],
         ),
       actions: [
-           IconButton(onPressed: (){
+          isSearch ? IconButton(onPressed: (){
+            setState(() {
+              isSearch = false;
+            });
+          }, icon: Icon(Icons.cancel)) : IconButton(onPressed: (){
           setState(() {
-            isSearch = 1;
+            isSearch = true;
           });
         }, icon: Icon(Icons.search))
       ],
@@ -57,16 +81,17 @@ class _CountryPageState extends State<CountryPage> {
     return FutureBuilder<List<Country>>(
         future: cs, builder: (context, snapshot) {
       if (snapshot.hasData) {
-        var countries = snapshot.data;
-
-        return ListView.builder(
-            itemCount: countries!.length,
+         var countries = snapshot.data;
+         countries!.sort((a,b)=>a.name.common.compareTo(b.name.common));
+         if(isSearch){
+            countries = countries.where((country){
+             return country.name.common.toLowerCase().contains(tfCountry.text.toLowerCase());
+           }).toList();
+         }
+         return ListView.builder(
+            itemCount: countries.length,
             itemBuilder: (context,index){
-          var country = countries[index];
-          countries.sort(
-                (a, b) => a.name.common.compareTo(b.name.common),
-          );
-
+          var country = countries![index];
           final firstLetter = country.name.common[0].toUpperCase();
           final bool showHeader = index == 0 || countries[index - 1].name.common[0].toUpperCase() != firstLetter;
           return Column(
@@ -76,16 +101,22 @@ class _CountryPageState extends State<CountryPage> {
                 Text(firstLetter),
               SizedBox(
                 height: 50,
-                child: Card(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Image.network(country.flags.png),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 25.0),
-                        child: Text(country.name.common),
-                      ),
-                    ],
+                child: GestureDetector(
+                  onTap: (){
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>DetailCounrty(country: country)));
+                  },
+                  child: Card(
+                    elevation: 15,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Image.network(country.flags.png),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 25.0),
+                          child: Text(country.name.common),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -113,6 +144,7 @@ class _CountryPageState extends State<CountryPage> {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => CountryPage()));
             }
+
           });
         },
         items: [BottomNavigationBarItem(icon: Icon(Icons.home),
@@ -127,3 +159,5 @@ class _CountryPageState extends State<CountryPage> {
     );
   }
 }
+
+
