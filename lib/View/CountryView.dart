@@ -98,24 +98,31 @@ class _CountryPageState extends State<CountryPage> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               if(showHeader)
-                Text(firstLetter),
+                Text(firstLetter,style: TextStyle(fontWeight: FontWeight.w600,fontSize: 18),),
               SizedBox(
                 height: 50,
                 child: GestureDetector(
                   onTap: (){
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>DetailCounrty(country: country)));
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailCounrty(country: country)));
                   },
                   child: Card(
+                    clipBehavior: Clip.antiAlias,
                     elevation: 15,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Image.network(country.flags.png),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 25.0),
-                          child: Text(country.name.common),
-                        ),
-                      ],
+                    child: SizedBox(
+                      width: 425,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                              width:50,
+                          child: Image.network(country.flags.png)),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 25.0),
+                            child: Text(country.name.common,maxLines: 1,overflow: TextOverflow.ellipsis,
+                              softWrap: false,),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),

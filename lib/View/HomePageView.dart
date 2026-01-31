@@ -4,7 +4,12 @@ import 'dart:developer';
 import 'package:country_app/Model/CountryModel.dart';
 import 'package:country_app/Services/CountryServices.dart';
 import 'package:country_app/View/CountryView.dart';
+import 'package:country_app/View/PopularCountryView.dart';
+import 'package:country_app/View/RegionView.dart';
+import 'package:country_app/ViewModel/RegionViewModel.dart';
 import 'package:flutter/material.dart';
+
+import '../Model/RegionModel.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -19,12 +24,14 @@ class _HomepageState extends State<HomePage> {
  bool isSearch = false;
 late Future<List<Country>> cs;
 var tfCR = TextEditingController();
+ late Future<List<Region>> region;
  @override
   void initState() {
     // TODO: implement initState
     super.initState();
     cs = CountryService.fetchCountries();
-  }
+    region = RegionViewModel().getRegion();
+ }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -255,27 +262,37 @@ var tfCR = TextEditingController();
             children: [
               Padding(
                 padding: const EdgeInsets.all(12.0),
-                child: Container(
-                height: 75,
-                  width: 75,
-                  child: Column(
-                  children: [
-                    Icon(Icons.circle),
-                    Text("Kıtalar")
-                  ],
+                child: GestureDetector(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>RegionView(region: region,)));
+                  },
+                  child: Container(
+                  height: 75,
+                    width: 75,
+                    child: Column(
+                    children: [
+                      Icon(Icons.circle),
+                      Text("Kıtalar")
+                    ],
+                    ),
                   ),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(15.0),
-                child: Container(
-                  height: 75,
-                  width: 75,
-                  child: Column(
-                    children: [
-                      Icon(Icons.local_fire_department),
-                      Text("En Popüler")
-                    ],
+                child: GestureDetector(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>PopularCountryView(counrty: cs)));
+                  },
+                  child: Container(
+                    height: 75,
+                    width: 75,
+                    child: Column(
+                      children: [
+                        Icon(Icons.local_fire_department),
+                        Text("En Popüler")
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -312,8 +329,8 @@ var tfCR = TextEditingController();
                           crossAxisCount: 1,
                           childAspectRatio: 1.2,
                           mainAxisSpacing: 10,),
-                          itemBuilder: (context,indeks){
-                             var country = populerCountries[indeks];
+                          itemBuilder: (context,index){
+                             var country = populerCountries[index];
                           return SizedBox(
                             child: Card(
                               elevation: 20,
@@ -370,10 +387,10 @@ var tfCR = TextEditingController();
           setState(() {
             selectedIndex = index;
             if(selectedIndex == 0){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage()));
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomePage()));
             }
             if(selectedIndex == 1){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>CountryPage()));
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>CountryPage()));
             }
           });
         },
