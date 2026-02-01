@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:country_app/Model/CountryModel.dart';
 import 'package:country_app/Services/CountryServices.dart';
 import 'package:country_app/View/CountryView.dart';
+import 'package:country_app/View/DetailCounrtyView.dart';
 import 'package:country_app/View/PopularCountryView.dart';
 import 'package:country_app/View/RegionView.dart';
 import 'package:country_app/ViewModel/RegionViewModel.dart';
@@ -105,31 +106,36 @@ var tfCR = TextEditingController();
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,childAspectRatio: 1.6),
                     itemBuilder: (context,index){
                      var country = countries![index];
-                     return SizedBox(
-                       height: 200,
-                       child: Card(
-                         child: Stack(
-                           children: [
-                                 Positioned.fill(
-                                     child: Image.network(country.flags.png,fit: BoxFit.cover,)),
-                                Positioned.fill(child: Container(
-                                  decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                      begin: Alignment.topCenter,
-                                      end: Alignment.bottomCenter,
-                                      colors: [
-                                        Colors.transparent,
-                                        Colors.black.withOpacity(0.8),
-                                      ]),
-                                  ),
-                                )),
-                                 Positioned(
-                                     top: 95,
-                                     left: 2,
-                                     child: Text(country.name.common,style: TextStyle(color: Colors.white),)
-                                 ),
+                     return GestureDetector(
+                       onTap: (){
+                         Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailCounrty(country: country)));
+                       },
+                       child: SizedBox(
+                         height: 200,
+                         child: Card(
+                           child: Stack(
+                             children: [
+                                   Positioned.fill(
+                                       child: Image.network(country.flags.png,fit: BoxFit.cover,)),
+                                  Positioned.fill(child: Container(
+                                    decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                        begin: Alignment.topCenter,
+                                        end: Alignment.bottomCenter,
+                                        colors: [
+                                          Colors.transparent,
+                                          Colors.black.withOpacity(0.8),
+                                        ]),
+                                    ),
+                                  )),
+                                   Positioned(
+                                       top: 95,
+                                       left: 2,
+                                       child: Text(country.name.common,style: TextStyle(color: Colors.white),)
+                                   ),
 
-                           ],
+                             ],
+                           ),
                          ),
                        ),
                      );
@@ -207,37 +213,42 @@ var tfCR = TextEditingController();
                     ),
                     itemBuilder: (context, index) {
                       final country = countries[index];
-                      return SizedBox(
-                        child: Card(
-                          elevation: 8,
-                          shadowColor: Colors.grey,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          clipBehavior: Clip.antiAlias,
-                          child: Stack(
-                            children: [
-                              Positioned.fill(
-                                  child: Image.network(country.flags.png,fit: BoxFit.cover,)),
-                              Positioned.fill(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                      begin: Alignment.topCenter,
-                                      end: Alignment.bottomCenter,
-                                      colors: [
-                                        Colors.transparent,
-                                        Colors.black.withOpacity(0.8),
-                                      ],
+                      return GestureDetector(
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailCounrty(country: country)));
+                        },
+                        child: SizedBox(
+                          child: Card(
+                            elevation: 8,
+                            shadowColor: Colors.grey,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            clipBehavior: Clip.antiAlias,
+                            child: Stack(
+                              children: [
+                                Positioned.fill(
+                                    child: Image.network(country.flags.png,fit: BoxFit.cover,)),
+                                Positioned.fill(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        begin: Alignment.topCenter,
+                                        end: Alignment.bottomCenter,
+                                        colors: [
+                                          Colors.transparent,
+                                          Colors.black.withOpacity(0.8),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              Positioned(
-                                  left: 2,
-                                  top: 170,
-                                  child: Text("${country.name.common}",style: TextStyle(fontSize: 13,color: Colors.white),))
-                            ],
+                                Positioned(
+                                    left: 2,
+                                    top: 170,
+                                    child: Text("${country.name.common}",style: TextStyle(fontSize: 13,color: Colors.white),))
+                              ],
+                            ),
                           ),
                         ),
                       );
@@ -331,40 +342,45 @@ var tfCR = TextEditingController();
                           mainAxisSpacing: 10,),
                           itemBuilder: (context,index){
                              var country = populerCountries[index];
-                          return SizedBox(
-                            child: Card(
-                              elevation: 20,
-                              clipBehavior: Clip.antiAlias,
-                              child: Stack(
-                                children: [
-                                  Positioned.fill(
-                                    child: Image.network(
-                                      country.flags.png,
-                                      fit: BoxFit.cover,
+                          return GestureDetector(
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailCounrty(country: country)));
+                            },
+                            child: SizedBox(
+                              child: Card(
+                                elevation: 20,
+                                clipBehavior: Clip.antiAlias,
+                                child: Stack(
+                                  children: [
+                                    Positioned.fill(
+                                      child: Image.network(
+                                        country.flags.png,
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
-                                  ),
-                                  Positioned.fill(child: Container(
-                                    decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                          begin: Alignment.topCenter,
-                                          end: Alignment.bottomCenter,
-                                          colors: [
-                                            Colors.transparent,
-                                            Colors.black.withOpacity(0.8)
-                                          ])
+                                    Positioned.fill(child: Container(
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                            begin: Alignment.topCenter,
+                                            end: Alignment.bottomCenter,
+                                            colors: [
+                                              Colors.transparent,
+                                              Colors.black.withOpacity(0.8)
+                                            ])
+                                      ),
+                                    )),
+                                    Positioned(
+                                      left: 8,
+                                      bottom: 8,
+                                      child: Text(
+                                        country.name.common,
+                                        style: TextStyle(color: Colors.white),
+                                      ),
                                     ),
-                                  )),
-                                  Positioned(
-                                    left: 8,
-                                    bottom: 8,
-                                    child: Text(
-                                      country.name.common,
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )
+                                  ],
+                                ),
+                              )
+                            ),
                           );
                           });
               }
@@ -383,6 +399,7 @@ var tfCR = TextEditingController();
   Widget buildNavBar(){
     return BottomNavigationBar(
         currentIndex: selectedIndex,
+        backgroundColor: Colors.white,
         onTap: (index){
           setState(() {
             selectedIndex = index;

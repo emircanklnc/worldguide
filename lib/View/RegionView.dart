@@ -1,4 +1,5 @@
 import 'package:country_app/View/CountryView.dart';
+import 'package:country_app/View/RegionCountryView.dart';
 import 'package:country_app/ViewModel/RegionViewModel.dart';
 import 'package:flutter/material.dart';
 import '../Model/RegionModel.dart';
@@ -44,19 +45,24 @@ return Container(
              return ListView.builder(
                  itemCount: region!.length,
                  itemBuilder: (context,index){
-                 return SizedBox(
-                   height: 75,
-                   width: 75,
-                   child: Card(
-                     color: region[index].colorName,
-                     child: Row(
-                       mainAxisAlignment: MainAxisAlignment.start,
-                       children: [
-                         Padding(
-                           padding: const EdgeInsets.only(left: 15.0),
-                           child: Text(region[index].name,style: TextStyle(fontSize: 20,color: Colors.white,fontWeight: FontWeight.w500),),
-                         ),
-                       ],
+                 return GestureDetector(
+                   onTap: (){
+                     Navigator.push(context, MaterialPageRoute(builder: (context)=>RegionCountryView(region: region[index].regionName)));
+                   },
+                   child: SizedBox(
+                     height: 75,
+                     width: 75,
+                     child: Card(
+                       color: region[index].colorName,
+                       child: Row(
+                         mainAxisAlignment: MainAxisAlignment.start,
+                         children: [
+                           Padding(
+                             padding: const EdgeInsets.only(left: 15.0),
+                             child: Text(region[index].name,style: TextStyle(fontSize: 20,color: Colors.white,fontWeight: FontWeight.w500),),
+                           ),
+                         ],
+                       ),
                      ),
                    ),
                  );

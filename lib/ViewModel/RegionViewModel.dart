@@ -7,11 +7,11 @@ Future<List<Region>> getRegion() async{
 
  List<Region> regionList = [];
 
- regionList.add(Region(name : "Asya",colorName: Color(0xFF1E3A5F)));
- regionList.add(Region(name: "Avrupa",colorName: Color(0xFF2D6A4F)));
- regionList.add(Region(name: "Afrika",colorName: Color(0xFFD97706)));
- regionList.add(Region(name: "Amerika",colorName: Color(0xFF3B82F6)));
- regionList.add(Region(name: "Okyanusya",colorName: Color(0xFF0D9488)));
+ regionList.add(Region(name : "Asya",colorName: Color(0xFF1E3A5F),regionName: "Asia"));
+ regionList.add(Region(name: "Avrupa",colorName: Color(0xFF2D6A4F),regionName: "Europe"));
+ regionList.add(Region(name: "Afrika",colorName: Color(0xFFD97706),regionName: "Africa"));
+ regionList.add(Region(name: "Amerika",colorName: Color(0xFF3B82F6),regionName: "Americas"));
+ regionList.add(Region(name: "Okyanusya",colorName: Color(0xFF0D9488),regionName: "Oceania"));
  return regionList;
 }
 }
