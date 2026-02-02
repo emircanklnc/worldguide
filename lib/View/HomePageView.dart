@@ -1,6 +1,4 @@
 
-import 'dart:developer';
-
 import 'package:country_app/Model/CountryModel.dart';
 import 'package:country_app/Services/CountryServices.dart';
 import 'package:country_app/View/CountryView.dart';
@@ -10,7 +8,9 @@ import 'package:country_app/View/PopularCountryView.dart';
 import 'package:country_app/View/RegionView.dart';
 import 'package:country_app/ViewModel/RegionViewModel.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../Model/BottomNavProvider.dart';
 import '../Model/RegionModel.dart';
 
 
@@ -27,6 +27,7 @@ class _HomepageState extends State<HomePage> {
 late Future<List<Country>> cs;
 var tfCR = TextEditingController();
  late Future<List<Region>> region;
+
  @override
   void initState() {
     // TODO: implement initState
@@ -36,10 +37,9 @@ var tfCR = TextEditingController();
  }
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: buildHomePageBody(),
-      bottomNavigationBar: buildNavBar(),
-
     );
   }
 
@@ -397,35 +397,6 @@ var tfCR = TextEditingController();
 
   }
 
-  Widget buildNavBar(){
-    return BottomNavigationBar(
-        currentIndex: selectedIndex,
-        backgroundColor: Colors.white,
-        onTap: (index){
-          setState(() {
-            selectedIndex = index;
-            if(selectedIndex == 0){
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomePage()));
-            }
-            if(selectedIndex == 1){
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>CountryPage()));
-            }
-            if(selectedIndex == 2){
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>FavouriteCountries()));
-            }
-          });
-        },
-        items: [BottomNavigationBarItem(icon: Icon(Icons.home),
-        label: "Ana Sayfa",
-        ),
-        BottomNavigationBarItem(icon: Icon(Icons.list),
-        label: "Ülkeler",
-        ),
-          BottomNavigationBarItem(icon: Icon(Icons.favorite),
-          label: "Favoriler"),
-        ]
-    );
-  }
 }
 
 

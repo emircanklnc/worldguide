@@ -31,7 +31,6 @@ class _CountryPageState extends State<CountryPage> {
     return Scaffold(
       appBar: buildCountryAppbar(),
       body: buildCountryBody(),
-      bottomNavigationBar: buildNavBar(),
 
     );
   }
@@ -138,37 +137,6 @@ class _CountryPageState extends State<CountryPage> {
     });
   }
 
-  Widget buildNavBar() {
-    return BottomNavigationBar(
-        currentIndex: selectedIndex,
-        onTap: (index) {
-          setState(() {
-            selectedIndex = index;
-            if (selectedIndex == 0) {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => HomePage()));
-            }
-            if (selectedIndex == 1) {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => CountryPage()));
-            }
-            if(selectedIndex == 2){
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>FavouriteCountries()));
-            }
-
-          });
-        },
-        items: [BottomNavigationBarItem(icon: Icon(Icons.home),
-          label: "Ana Sayfa",
-        ),
-          BottomNavigationBarItem(icon: Icon(Icons.list),
-            label: "Ülkeler",
-          ),
-          BottomNavigationBarItem(icon: Icon(Icons.favorite),
-              label: "Favoriler"),
-        ]
-    );
-  }
 }
 
 
