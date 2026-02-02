@@ -1,12 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Model/CountryModel.dart';
+import '../ViewModel/FavouriteCountryViewModel.dart';
 
-class DetailCounrty extends StatelessWidget {
+class DetailCounrty extends StatefulWidget {
   late Country country;
 
   DetailCounrty({required this.country});
 
+  @override
+  State<DetailCounrty> createState() => _DetailCounrtyState();
+}
+
+class _DetailCounrtyState extends State<DetailCounrty> {
+ late FavouriteCountryViewmodel favouriteCountry;
+ late List<String> favouriteCountries = [];
+ @override
+
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+     favouriteCountry = FavouriteCountryViewmodel();
+     loadFavourites();
+ }
+ Future<void> loadFavourites() async {
+   var favs = await favouriteCountry.fetchfavouriteCountries();
+   setState(() {
+     favouriteCountries = favs;
+   });
+ }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +58,7 @@ Widget detailCountryBody(){
                     child: Card(
                       color: Colors.grey,
                       child: Positioned.fill(
-                      child: Image.network(country.flags.png,fit: BoxFit.cover,))),
+                      child: Image.network(widget.country.flags.png,fit: BoxFit.cover,))),
                   ),
                 ),
 
@@ -64,7 +87,7 @@ Widget detailCountryBody(){
                                       Text("Ülke Adı: ",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 15),maxLines: 1, overflow: TextOverflow.ellipsis,
                                         softWrap: false,),
                                       Expanded(
-                                        child: Text(country.name.common,maxLines: 1, overflow: TextOverflow.ellipsis,
+                                        child: Text(widget.country.name.common,maxLines: 1, overflow: TextOverflow.ellipsis,
                                           softWrap: false,),
                                       ),
                                     ],
@@ -75,7 +98,7 @@ Widget detailCountryBody(){
                                   child: Row(
                                     children: [
                                       Text("Ülke Kodu : ",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 15),),
-                                      Text(country.cca2)
+                                      Text(widget.country.cca2)
                                     ],
                                   ),
                                 ),
@@ -84,7 +107,7 @@ Widget detailCountryBody(){
                                   child: Row(
                                     children: [
                                       Text("Ülkenin Başkenti: ",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 15),),
-                                      Text(country.capital.first)
+                                      Text(widget.country.capital.first)
                                     ],
                                   ),
                                 ),
@@ -93,7 +116,7 @@ Widget detailCountryBody(){
                                   child: Row(
                                     children: [
                                       Text("Ülkenin Bulunduğu Bölge: ",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 15),),
-                                      Text(country.region),
+                                      Text(widget.country.region),
                                     ],
                                   ),
                                 ),
@@ -102,7 +125,7 @@ Widget detailCountryBody(){
                                   child: Row(
                                     children: [
                                       Text("Ülke Kullandığı Dil : ",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 15),),
-                                      Text(country.languages.values.first)
+                                      Text(widget.country.languages.values.first)
                                     ],
                                   ),
                                 ),
@@ -111,7 +134,7 @@ Widget detailCountryBody(){
                                   child: Row(
                                     children: [
                                       Text("Ülke Popülasyonu : ",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 15),),
-                                      Text(country.population.toString()),
+                                      Text(widget.country.population.toString()),
                                     ],
                                   ),
                                 ),
@@ -119,8 +142,12 @@ Widget detailCountryBody(){
                                   padding: const EdgeInsets.only(left: 15.0),
                                   child: SizedBox(
                                       width:300,
-                                      child: ElevatedButton(onPressed: (){},
-                                          child: Text("Favorilere Ekle"),
+                                      child: ElevatedButton(onPressed: () async{
+                                        await favouriteCountry.favouriteCountriesAddButton(widget.country.cca2);
+                                        Navigator.pop(context, true);
+                                        loadFavourites();
+                                        },
+                                          child: favouriteCountries.contains(widget.country.cca2) ? Text("Favoriden Çıkar") : Text("Favorilere Ekle"),
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor: Colors.indigo,
                                             foregroundColor: Colors.white,
@@ -140,7 +167,8 @@ Widget detailCountryBody(){
         ),
       ),
     );
+  }
 }
 
 
-}
+

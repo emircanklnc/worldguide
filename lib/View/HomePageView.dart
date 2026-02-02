@@ -5,6 +5,7 @@ import 'package:country_app/Model/CountryModel.dart';
 import 'package:country_app/Services/CountryServices.dart';
 import 'package:country_app/View/CountryView.dart';
 import 'package:country_app/View/DetailCounrtyView.dart';
+import 'package:country_app/View/FavouriteCountriesView.dart';
 import 'package:country_app/View/PopularCountryView.dart';
 import 'package:country_app/View/RegionView.dart';
 import 'package:country_app/ViewModel/RegionViewModel.dart';
@@ -408,6 +409,9 @@ var tfCR = TextEditingController();
             }
             if(selectedIndex == 1){
               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>CountryPage()));
+            }
+            if(selectedIndex == 2){
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>FavouriteCountries()));
             }
           });
         },

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../Model/CountryModel.dart';
 import '../Services/CountryServices.dart';
+import 'FavouriteCountriesView.dart';
 import 'HomePageView.dart';
 
 class CountryPage extends StatefulWidget {
@@ -150,6 +151,9 @@ class _CountryPageState extends State<CountryPage> {
             if (selectedIndex == 1) {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => CountryPage()));
+            }
+            if(selectedIndex == 2){
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>FavouriteCountries()));
             }
 
           });
