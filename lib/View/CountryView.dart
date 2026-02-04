@@ -1,10 +1,8 @@
 import 'package:country_app/View/DetailCounrtyView.dart';
+import 'package:country_app/ViewModel/CountryModelProvider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../Model/CountryModel.dart';
-import '../Services/CountryServices.dart';
-import 'FavouriteCountriesView.dart';
-import 'HomePageView.dart';
 
 class CountryPage extends StatefulWidget {
   const CountryPage({super.key});
@@ -15,15 +13,13 @@ class CountryPage extends StatefulWidget {
 
 class _CountryPageState extends State<CountryPage> {
   @override
-  late Future<List<Country>> cs;
-  late int selectedIndex = 1;
   bool isSearch = false;
   var tfCountry = TextEditingController();
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    cs = CountryService.fetchCountries();
+
+  void dispose() {
+    tfCountry.dispose();
+    super.dispose();
   }
 
   @override
@@ -78,10 +74,10 @@ class _CountryPageState extends State<CountryPage> {
 
 
   Widget buildCountryBody() {
-    return FutureBuilder<List<Country>>(
-        future: cs, builder: (context, snapshot) {
-      if (snapshot.hasData) {
-         var countries = snapshot.data;
+    return Consumer<CountryModelProvider>(
+         builder: (context,vm,_) {
+      if (vm.isLoading == false) {
+         var countries = vm.countries;
          countries!.sort((a,b)=>a.name.common.compareTo(b.name.common));
          if(isSearch){
             countries = countries.where((country){

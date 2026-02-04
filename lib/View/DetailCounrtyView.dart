@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Model/CountryModel.dart';
@@ -14,22 +15,10 @@ class DetailCounrty extends StatefulWidget {
 }
 
 class _DetailCounrtyState extends State<DetailCounrty> {
- late FavouriteCountryViewmodel favouriteCountry;
- late List<String> favouriteCountries = [];
+
  @override
 
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-     favouriteCountry = FavouriteCountryViewmodel();
-     loadFavourites();
- }
- Future<void> loadFavourites() async {
-   var favs = await favouriteCountry.fetchfavouriteCountries();
-   setState(() {
-     favouriteCountries = favs;
-   });
- }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -138,21 +127,23 @@ Widget detailCountryBody(){
                                     ],
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 15.0),
-                                  child: SizedBox(
-                                      width:300,
-                                      child: ElevatedButton(onPressed: () async{
-                                        await favouriteCountry.favouriteCountriesAddButton(widget.country.cca2);
-                                        Navigator.pop(context, true);
-                                        loadFavourites();
+                                Consumer<FavouriteCountryViewmodel>(
+                                  builder: (context,vm,_){
+                                    return Padding(
+                                    padding: const EdgeInsets.only(left: 15.0),
+                                    child: SizedBox(
+                                        width:300,
+                                        child: ElevatedButton(onPressed: () async{
+                                          await vm.toggleFavourite(widget.country.cca2);
                                         },
-                                          child: favouriteCountries.contains(widget.country.cca2) ? Text("Favoriden Çıkar") : Text("Favorilere Ekle"),
+                                          child: vm.isFavourite(widget.country.cca2) ? Text("Favoriden Çıkar") : Text("Favorilere Ekle"),
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor: Colors.indigo,
                                             foregroundColor: Colors.white,
                                           ),
-                                      )),
+                                        )),
+                                  );},
+
                                 ),
                               ],
                             ),

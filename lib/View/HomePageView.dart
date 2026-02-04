@@ -1,17 +1,13 @@
 
-import 'package:country_app/Model/CountryModel.dart';
-import 'package:country_app/Services/CountryServices.dart';
-import 'package:country_app/View/CountryView.dart';
 import 'package:country_app/View/DetailCounrtyView.dart';
-import 'package:country_app/View/FavouriteCountriesView.dart';
 import 'package:country_app/View/PopularCountryView.dart';
 import 'package:country_app/View/RegionView.dart';
+import 'package:country_app/ViewModel/CountryModelProvider.dart';
 import 'package:country_app/ViewModel/RegionViewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../Model/BottomNavProvider.dart';
 import '../Model/RegionModel.dart';
+
 
 
 class HomePage extends StatefulWidget {
@@ -22,20 +18,26 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomepageState extends State<HomePage> {
- int selectedIndex = 0;
  bool isSearch = false;
-late Future<List<Country>> cs;
 var tfCR = TextEditingController();
- late Future<List<Region>> region;
-
+var searchCr = TextEditingController();
+late Future<List<Region>> region;
  @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    cs = CountryService.fetchCountries();
     region = RegionViewModel().getRegion();
  }
-  @override
+ @override
+ @override
+ void dispose() {
+   tfCR.dispose();
+   searchCr.dispose();
+   super.dispose();
+ }
+
+
+ @override
   Widget build(BuildContext context) {
 
     return Scaffold(
@@ -56,11 +58,9 @@ var tfCR = TextEditingController();
               child: Padding(
                 padding: const EdgeInsets.only(left: 18.0),
                 child: TextField(
+                  controller: searchCr,
                   onChanged:(callResponse){
-                    setState(() {
-                      isSearch =true;
-                      tfCR.text = callResponse;
-                    });
+                    context.read<CountryModelProvider>().searchCountry(callResponse);
                   },
                   decoration: InputDecoration(
                       hint: Row(
@@ -76,9 +76,10 @@ var tfCR = TextEditingController();
                           Padding(
                             padding: const EdgeInsets.only(left: 125.0,top: 10),
                             child: IconButton(onPressed: (){
-                                setState(() {
-                                  isSearch = false;
-                                });
+                              context.read<CountryModelProvider>().clearSearch();
+                              setState(() {
+                                isSearch = false;
+                              });
                               }, icon: Icon(Icons.cancel)),
                           ),
                         ],
@@ -94,14 +95,9 @@ var tfCR = TextEditingController();
           ),
           SizedBox(
             height: 735,
-            child: FutureBuilder(future: cs, builder: (context,snapshot){
-              if(snapshot.hasData){
-                var countries = snapshot.data;
-                if(isSearch){
-                  countries = countries!.where((country){
-                    return country.name.common.toLowerCase().contains(tfCR.text.toLowerCase());
-                  }).toList();
-                }
+            child: Consumer<CountryModelProvider>(builder: (context,vm,child){
+              if(vm.isLoading == false){
+                var  countries = vm.countries;
                 return GridView.builder(
                     itemCount: countries!.length,
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,childAspectRatio: 1.6),
@@ -197,11 +193,10 @@ var tfCR = TextEditingController();
 
           SizedBox(
             height: 200,
-            child: FutureBuilder<List<Country>>(
-              future: cs,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  final countries = snapshot.data!;
+            child: Consumer<CountryModelProvider>(
+              builder: (context,vm,child) {
+                if (vm.isLoading == false) {
+                  final countries = vm.countries;
 
                   return GridView.builder(
                     scrollDirection: Axis.horizontal,
@@ -255,9 +250,8 @@ var tfCR = TextEditingController();
                       );
                     },
                   );
-                } else if (snapshot.hasError) {
-                  return const Center(child: Text("API Error"));
-                } else {
+                }
+                 else {
                   return const Center(child: CircularProgressIndicator());
                 }
               },
@@ -294,7 +288,7 @@ var tfCR = TextEditingController();
                 padding: const EdgeInsets.all(15.0),
                 child: GestureDetector(
                   onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>PopularCountryView(counrty: cs)));
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>PopularCountryView()));
                   },
                   child: Container(
                     height: 75,
@@ -328,10 +322,10 @@ var tfCR = TextEditingController();
              Text("En Popüler",style: TextStyle(fontSize: 30,fontWeight: FontWeight.w700),),
           SizedBox(
             height: 200,
-            child: FutureBuilder<List<Country>>(future: cs, builder: (context,snapshot){
-              if(snapshot.hasData){
-                var countries = snapshot.data;
-                var populerCountries = countries!.where((country){
+            child: Consumer<CountryModelProvider>( builder: (context,vm,child){
+              if(vm.isLoading == false){
+                var countries = vm.countries;
+                var populerCountries = countries.where((country){
                   return country.name.common == "Turkey" || country.name.common == "France" || country.name.common == "Germany" || country.name.common == "Japan";
                 }).toList();
                 return GridView.builder(

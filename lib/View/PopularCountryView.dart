@@ -1,12 +1,10 @@
 import 'package:country_app/View/DetailCounrtyView.dart';
+import 'package:country_app/ViewModel/CountryModelProvider.dart';
 import 'package:flutter/material.dart';
-
-import '../Model/CountryModel.dart';
+import 'package:provider/provider.dart';
 import 'CountryView.dart';
 
 class PopularCountryView extends StatelessWidget {
-late Future<List<Country>> counrty;
-PopularCountryView({required this.counrty});
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +34,9 @@ PopularCountryView({required this.counrty});
             padding: const EdgeInsets.only(top: 125.0),
             child: SizedBox(
               height: 250,
-              child: FutureBuilder(future: counrty, builder: (context,snapshot){
-                 if(snapshot.hasData){
-                   var countries = snapshot.data;
+              child: Consumer<CountryModelProvider>(builder: (context,vm,_){
+                 if(vm.isLoading == false){
+                   var countries = vm.countries;
                    var popularCountries = countries!.where((country){
                      return  country.name.common == "France" || country.name.common == "Germany" || country.name.common == "Japan" || country.name.common == "Turkey" || country.name.common == "Italy";
                    }).toList();
@@ -114,9 +112,9 @@ PopularCountryView({required this.counrty});
             padding: const EdgeInsets.only(top:150.0),
             child: SizedBox(
               height: 75,
-              child: FutureBuilder(future: counrty, builder: (context,snapshot){
-                if(snapshot.hasData){
-                  var countries = snapshot.data;
+              child: Consumer<CountryModelProvider>(builder: (context,vm,_){
+                if(vm.isLoading == false){
+                  var countries = vm.countries;
                   var popularCountries = countries!.where((country){
                     return  country.name.common == "France" || country.name.common == "Germany" || country.name.common == "Japan" || country.name.common == "Italy" || country.name.common == "Turkey" || country.name.common == "United Kingdom" || country.name.common == "Greece" || country.name.common == "Thailand" ;
                   }).toList();
