@@ -7,6 +7,7 @@ import 'package:country_app/ViewModel/RegionViewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../Model/RegionModel.dart';
+import '../ViewModel/HomePageViewModel.dart';
 
 
 
@@ -22,6 +23,7 @@ class _HomepageState extends State<HomePage> {
 var tfCR = TextEditingController();
 var searchCr = TextEditingController();
 late Future<List<Region>> region;
+ final hpVM = HomePageViewModel();
  @override
   void initState() {
     // TODO: implement initState
@@ -325,9 +327,7 @@ late Future<List<Region>> region;
             child: Consumer<CountryModelProvider>( builder: (context,vm,child){
               if(vm.isLoading == false){
                 var countries = vm.countries;
-                var populerCountries = countries.where((country){
-                  return country.name.common == "Turkey" || country.name.common == "France" || country.name.common == "Germany" || country.name.common == "Japan";
-                }).toList();
+                var populerCountries = hpVM.popularCounrtyFilter(countries);
                 return GridView.builder(
                           itemCount: populerCountries.length,
                           scrollDirection: Axis.horizontal,

@@ -1,5 +1,6 @@
 import 'package:country_app/View/DetailCounrtyView.dart';
 import 'package:country_app/ViewModel/CountryModelProvider.dart';
+import 'package:country_app/ViewModel/CountryViewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -15,6 +16,7 @@ class _CountryPageState extends State<CountryPage> {
   @override
   bool isSearch = false;
   var tfCountry = TextEditingController();
+  final cVM= CountryViewModel();
   @override
 
   void dispose() {
@@ -78,18 +80,13 @@ class _CountryPageState extends State<CountryPage> {
          builder: (context,vm,_) {
       if (vm.isLoading == false) {
          var countries = vm.countries;
-         countries!.sort((a,b)=>a.name.common.compareTo(b.name.common));
-         if(isSearch){
-            countries = countries.where((country){
-             return country.name.common.toLowerCase().contains(tfCountry.text.toLowerCase());
-           }).toList();
-         }
+         countries = cVM.regionCountryFilter(countries, isSearch, tfCountry.text);
          return ListView.builder(
             itemCount: countries.length,
             itemBuilder: (context,index){
           var country = countries![index];
-          final firstLetter = country.name.common[0].toUpperCase();
-          final bool showHeader = index == 0 || countries[index - 1].name.common[0].toUpperCase() != firstLetter;
+          final firstLetter = cVM.getHeader(country);
+          final bool showHeader = cVM.showHeader(countries, index);
           return Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [

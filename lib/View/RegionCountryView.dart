@@ -1,4 +1,5 @@
 import 'package:country_app/Services/CountryServices.dart';
+import 'package:country_app/ViewModel/RegionCountryViewModel.dart';
 import 'package:flutter/material.dart';
 
 import '../Model/CountryModel.dart';
@@ -16,6 +17,7 @@ class _RegionCountryViewState extends State<RegionCountryView> {
   late Future<List<Country>> cs;
   var tfCountry = TextEditingController();
   bool isSearch = false;
+  final rcVM = RegionCountryViewModel();
 @override
   void initState() {
     // TODO: implement initState
@@ -75,21 +77,13 @@ class _RegionCountryViewState extends State<RegionCountryView> {
         future: cs, builder: (context, snapshot) {
       if (snapshot.hasData) {
         var countries = snapshot.data;
-        countries!.sort((a,b)=>a.name.common.compareTo(b.name.common));
-        if(isSearch){
-          countries = countries.where((country){
-            return country.name.common.toLowerCase().contains(tfCountry.text.toLowerCase());
-          }).toList();
-        }
-        countries = countries.where((country){
-          return country.region.toLowerCase().contains(widget.region.toLowerCase());
-        }).toList();
+        countries = rcVM.regionCountryFilter(countries!, isSearch, tfCountry.text, widget.region);
         return ListView.builder(
             itemCount: countries.length,
             itemBuilder: (context,index){
               var country = countries![index];
-              final firstLetter = country.name.common[0].toUpperCase();
-              final bool showHeader = index == 0 || countries[index - 1].name.common[0].toUpperCase() != firstLetter;
+              final firstLetter = rcVM.getHeader(country);
+              final bool showHeader = rcVM.shouldShowHeader(countries, index);
               return Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [

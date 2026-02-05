@@ -1,11 +1,12 @@
 import 'package:country_app/View/DetailCounrtyView.dart';
 import 'package:country_app/ViewModel/CountryModelProvider.dart';
+import 'package:country_app/ViewModel/PopularCountryViewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'CountryView.dart';
 
 class PopularCountryView extends StatelessWidget {
-
+  final pVM = PopularCountryViewModel();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,6 +21,7 @@ class PopularCountryView extends StatelessWidget {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
+                Colors.green,
                 Colors.white70,
                 Colors.black26
               ])
@@ -37,9 +39,7 @@ class PopularCountryView extends StatelessWidget {
               child: Consumer<CountryModelProvider>(builder: (context,vm,_){
                  if(vm.isLoading == false){
                    var countries = vm.countries;
-                   var popularCountries = countries!.where((country){
-                     return  country.name.common == "France" || country.name.common == "Germany" || country.name.common == "Japan" || country.name.common == "Turkey" || country.name.common == "Italy";
-                   }).toList();
+                   var popularCountries = pVM.popularFilter1(countries);
                    return GridView.builder(
                      itemCount: popularCountries.length,
                        scrollDirection: Axis.horizontal,
@@ -115,9 +115,7 @@ class PopularCountryView extends StatelessWidget {
               child: Consumer<CountryModelProvider>(builder: (context,vm,_){
                 if(vm.isLoading == false){
                   var countries = vm.countries;
-                  var popularCountries = countries!.where((country){
-                    return  country.name.common == "France" || country.name.common == "Germany" || country.name.common == "Japan" || country.name.common == "Italy" || country.name.common == "Turkey" || country.name.common == "United Kingdom" || country.name.common == "Greece" || country.name.common == "Thailand" ;
-                  }).toList();
+                  var popularCountries = pVM.popularFilter2(countries);
                   return GridView.builder(
                       itemCount: popularCountries.length,
                       scrollDirection: Axis.horizontal,

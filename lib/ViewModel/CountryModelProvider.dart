@@ -38,6 +38,7 @@ class CountryModelProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+
   void clearSearch() {
     isSearch = false;
     _filteredCountries = _allCountries;

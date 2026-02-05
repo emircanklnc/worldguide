@@ -29,6 +29,8 @@ class Country {
       json["population"] ?? 0,
     );
   }
+
+  void operator [](int other) {}
 }
 
 
