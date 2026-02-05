@@ -62,6 +62,20 @@ Arama iptal edildiğinde ana ekrana dönüş
 
 Kıtaya / bölgeye göre ülke listeleme
 
+⭐ Favori Ülkeler
+
+
+
+Ülkeleri favorilere ekleme / çıkarma
+
+
+
+Favori ülkelerin ayrı ekranda listelenmesi
+
+
+
+Favori durumu UI üzerinde anlık güncellenir
+
 
 
 🔥 Popüler Ülkeler
@@ -133,6 +147,7 @@ Stateful Widget \& Controller mantığı
 
 
 ScrollController ile Chat UX
+
 
 
 🤖 Gemini AI Entegrasyonu
