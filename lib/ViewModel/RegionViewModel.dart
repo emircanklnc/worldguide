@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 class RegionViewModel {
 
 Future<List<Region>> getRegion() async{
-
-
  List<Region> regionList = [];
-
  regionList.add(Region(name : "Asya",colorName: Color(0xFF1E3A5F),regionName: "Asia"));
  regionList.add(Region(name: "Avrupa",colorName: Color(0xFF2D6A4F),regionName: "Europe"));
  regionList.add(Region(name: "Afrika",colorName: Color(0xFFD97706),regionName: "Africa"));

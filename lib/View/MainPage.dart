@@ -1,6 +1,6 @@
+import 'package:country_app/View/ChatBotView.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../Model/BottomNavProvider.dart';
 import 'CountryView.dart';
 import 'FavouriteCountriesView.dart';
@@ -15,6 +15,7 @@ class MainPage extends StatelessWidget {
     final pages = [
       HomePage(),
       CountryPage(),
+      ChatBotView(),
       FavouriteCountries(),
     ];
 
@@ -30,7 +31,6 @@ class MainPage extends StatelessWidget {
       builder: (context,nav,_){
         return BottomNavigationBar(
           currentIndex: nav.currentIndex,
-          backgroundColor: Colors.white,
           onTap: (index) {
             nav.ChangedIndex(index);
           },
@@ -38,14 +38,21 @@ class MainPage extends StatelessWidget {
             BottomNavigationBarItem(
               icon: Icon(Icons.home),
               label: "Ana Sayfa",
+              backgroundColor: Colors.indigo
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.list),
               label: "Ülkeler",
+              backgroundColor: Colors.indigo
+            ),
+            BottomNavigationBarItem(icon: Icon(Icons.chat),
+              label: "ChatBot",
+              backgroundColor: Colors.indigo
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.favorite),
               label: "Favoriler",
+              backgroundColor: Colors.indigo
             ),
           ],
         );
