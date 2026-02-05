@@ -1,16 +1,171 @@
-# country_app
+🌍 Country App – Flutter
 
-A new Flutter project.
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+Bu proje, Flutter kullanılarak geliştirilmiş;
 
-A few resources to get you started if this is your first Flutter project:
+ülkeleri, bölgeleri ve popüler ülkeleri listeleyen, aynı zamanda Gemini AI destekli chatbot içeren bir mobil uygulamadır.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+Projenin temel amacı:
+
+
+
+Flutter mimarisini doğru öğrenmek
+
+
+
+View / ViewModel ayrımını kavramak
+
+
+
+API entegrasyonu ve state yönetimi pratiği yapmak
+
+
+
+Gerçek bir uygulama üzerinden kendimi geliştirmek
+
+
+
+🚀 Özellikler
+
+
+
+🌐 Ülkeleri Listeleme
+
+
+
+REST Countries API kullanılarak ülkeler çekilir
+
+
+
+Bayrak, ülke adı, başkent, nüfus gibi bilgiler gösterilir
+
+
+
+🔍 Arama (Search)
+
+
+
+Ülke adına göre canlı arama
+
+
+
+Arama iptal edildiğinde ana ekrana dönüş
+
+
+
+🗺️ Bölgelere Göre Filtreleme
+
+
+
+Kıtaya / bölgeye göre ülke listeleme
+
+
+
+🔥 Popüler Ülkeler
+
+
+
+Belirli kriterlere göre (nüfus vb.) filtrelenmiş ülkeler
+
+
+
+💬 Gemini AI Chatbot
+
+
+
+Google Gemini API ile entegre
+
+
+
+Kullanıcı mesajı → API → cevap akışı
+
+
+
+Chat UI (sağ: kullanıcı, sol: bot)
+
+
+
+Yeni mesaj geldiğinde otomatik aşağı kayma
+
+
+
+🧠 Kullanılan Teknolojiler
+
+
+
+Flutter (Dart)
+
+
+
+HTTP – REST API istekleri
+
+
+
+MVVM yaklaşımı (Provider’sız)
+
+
+
+View → UI
+
+
+
+ViewModel → iş mantığı
+
+
+
+Model → veri yapıları
+
+
+
+Google Gemini API
+
+
+
+JSON Modelleme
+
+
+
+Stateful Widget \& Controller mantığı
+
+
+
+ScrollController ile Chat UX
+
+
+🤖 Gemini AI Entegrasyonu
+
+
+
+Google Gemini generateContent endpoint’i kullanıldı
+
+
+
+Gelen response Model sınıfı ile parse edildi
+
+
+
+ViewModel içinde mesaj yönetimi yapıldı
+
+
+
+UI sadece veriyi çiziyor
+
+
+
+Bu sayede:
+
+
+
+API bağımlılığı UI’dan ayrıldı
+
+
+
+Kod test edilebilir hale geldi
+
+
+
+Gerçek MVVM mantığına yaklaşıldı
+
